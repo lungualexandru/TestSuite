@@ -4,14 +4,26 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
+
 def get_voltage_and_current(rawData):
     data = []
-    for i in range(0, len(querylist), 2):
-        voltage = float(querylist[i])
-        current = float(querylist[i + 1])
-        sweep = [voltage, current]
-        data + sweep
-    return data
+    voltagearr = []
+    currentarr = []
+    for i in range(0, len(rawData), 2):
+        voltage = float(rawData[i])
+        current = float(rawData[i + 1])
+        voltagearr.append(voltage)
+        currentarr.append(current)
+    print(voltagearr)
+    print(currentarr)
+    return([voltagearr,currentarr])
+
+def sweep_type(function):
+    return 'F{},1X'.format(function)
+
+
+def sweep_param(start, steps, step, range, delay):
+    return 'Q1,{},{},{},{},{}X'.format(start, steps, step, range, delay)
 
 
 rm = pyvisa.ResourceManager()
@@ -22,11 +34,11 @@ instrument = input('what instrument do you want to use :')
 print('You opted to use ', instrument)
 isInputValid = instrument in listOfIntruments
 print("the instrument you picked ", isInputValid)
-queryList=""
+querylist = ""
 if isInputValid:
     inst = rm.open_resource(instrument)
-    inst.write("F0,1X")
-    inst.write("Q1,0,5,1,2,100X")
+    inst.write(sweep_type(0))
+    inst.write(sweep_param(0, 5, 2, 2, 500))
     inst.write("N1X")
     inst.write("H0X")
     time.sleep(5)
@@ -34,13 +46,11 @@ if isInputValid:
     querylist = (inst.query("Measure$")).replace("NSSWV", "").replace("NMSWI", "").split(",")
 else:
     print("the instrument you picked was not found")
-
 graphData = get_voltage_and_current(querylist)
 for item in graphData:
-    print(item)
-
+     print(item)
 plt.title("Voltage Sweep")
 plt.xlabel("Voltage")
 plt.ylabel("Current")
-plt.plot(querylist);
+plt.plot(graphData);
 plt.show()
