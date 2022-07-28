@@ -3,6 +3,7 @@ import pyvisa
 import numpy as np
 from matplotlib import pyplot as plt
 
+instrument = input('what instrument do you want to use')
 rm = pyvisa.ResourceManager()
 rm.list_resources()
 inst = rm.open_resource('GPIB0::22::INSTR')
@@ -13,6 +14,7 @@ inst.write("H0X")
 time.sleep(5)
 inst.write("G5,1,2X")
 querylist = (inst.query("Measure$")).replace("NSSWV", "").replace("NMSWI", "").split(",")
+
 
 
 def get_voltage_and_current(rawData):
