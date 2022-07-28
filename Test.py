@@ -24,7 +24,7 @@ isInputValid = instrument in listOfIntruments
 print("the instrument you picked ", isInputValid)
 queryList=""
 if isInputValid:
-    inst = rm.open_resource('GPIB0::22::INSTR')
+    inst = rm.open_resource(instrument)
     inst.write("F0,1X")
     inst.write("Q1,0,5,1,2,100X")
     inst.write("N1X")
