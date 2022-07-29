@@ -29,16 +29,17 @@ def get_sleep_time(swpstr):
     sleeptime = int(sweepdelay) * int(sweepsteps)
     return sleeptime / 1000
 
-def plot_data(rawdata):
-    plt.title("Voltage Sweep")
-    plt.xlabel("Voltage")
-    plt.ylabel("Current")
-    ypoints = rawdata[1::2]
-    xpoints = rawdata[0::2]
-    yint = [float(x) for x in ypoints]
-    xint = [float(y) for y in xpoints]
-    plt.plot(xint, yint)
-    plt.show()
+# def plot_data(rawdata):
+    # plt.title("Voltage Sweep")
+    # plt.xlabel("Voltage")
+    # plt.ylabel("Current")
+    # ypoints = rawdata[1::2]
+    # xpoints = rawdata[0::2]
+    # yint = [float(x) for x in ypoints]
+    # xint = [float(y) for y in xpoints]
+    # plt.plot(xint, yint)
+    # plt.show()
+    # return (xint, yint)
 
 def main():
     rm = pyvisa.ResourceManager()
@@ -49,8 +50,9 @@ def main():
     myinstr.write(sweepstr)
     trigger_run(myinstr, get_sleep_time(sweepstr))
     pltdata = get_data(myinstr)
-    plot_data(pltdata)
+    # plot_data(pltdata)
     rm.close()
+    return pltdata
 
 
 if __name__ == '__main__':
