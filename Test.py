@@ -4,7 +4,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-
 def get_voltage_and_current(rawData):
     data = []
     voltagearr = []
@@ -16,7 +15,8 @@ def get_voltage_and_current(rawData):
         currentarr.append(current)
     print(voltagearr)
     print(currentarr)
-    return([voltagearr,currentarr])
+    return ([voltagearr, currentarr])
+
 
 def sweep_type(function):
     return 'F{},1X'.format(function)
@@ -48,7 +48,7 @@ else:
     print("the instrument you picked was not found")
 graphData = get_voltage_and_current(querylist)
 for item in graphData:
-     print(item)
+    print(item)
 plt.title("Voltage Sweep")
 plt.xlabel("Voltage")
 plt.ylabel("Current")
