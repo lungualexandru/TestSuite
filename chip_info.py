@@ -12,9 +12,7 @@ from tkinter import ttk
 # TODO: save form to specified path
 def show_entry_fields():
     print("Serial #: %s\nDescription: %s" % (e1.get(), e2.get()))
-def openmaingui():
-    maingui()
-    master.quit()
+
 
 master = tk.Tk()
 serial_num = tk.StringVar()
@@ -34,6 +32,13 @@ e2 = tk.Entry(master, textvariable=chip_descr)
 
 e1.grid(row=0, column=1)
 e2.grid(row=1, column=1)
+
+def openmaingui():
+    ts_visa=selected_thermostream.get()
+    sn_input=serial_num.get()
+    cd_input=chip_descr.get()
+    master.destroy()
+    maingui(ts_visa,sn_input,cd_input)
 
 tk.Button(master, text='Quit', command=master.quit).grid(row=4, column=0, sticky=tk.W, pady=4)
 tk.Button(master, text='Show', command=show_entry_fields).grid(row=4, column=1, sticky=tk.W, pady=4)
