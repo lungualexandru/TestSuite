@@ -43,5 +43,7 @@ def instr_changed(event):
 
 instr_options.bind('<<ComboboxSelected>>', instr_changed)
 
+chip_serial_num = tk.StringVar()
+chip_serial_fld= ttk.Entry(root,textvariable=chip_serial_num)
+chip_serial_fld.pack(side=tk.TOP)
 root.mainloop()
-

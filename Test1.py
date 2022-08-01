@@ -3,27 +3,33 @@ import time
 import numpy as np
 from matplotlib import pyplot as plt
 
+
 def sweep_type(function):
     return 'F{},1X'.format(function)
 
+
 def sweep_param(start, steps, step, range, delay):
     return 'Q1,{},{},{},{},{}X'.format(start, steps, step, range, delay)
+
 
 def trigger_run(instance, sleeptime):
     instance.write("N1X")
     instance.write("H0X")
     time.sleep(sleeptime)
 
+
 def get_data(data):
     data.write("G5,1,2X")
     formatted_data = data.query("Measure$").replace("NSSWV", "").replace("NMSWI", "").split(",")
     return formatted_data
+
 
 def get_sleep_time(swpstr):
     sweepdelay = swpstr.split(",")[5].replace("X", "")
     sweepsteps = swpstr.split(",")[2].replace("x", "")
     sleeptime = int(sweepdelay) * int(sweepsteps)
     return sleeptime / 1000
+
 
 def main():
     rm = pyvisa.ResourceManager()
@@ -41,146 +47,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
