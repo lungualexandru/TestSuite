@@ -17,11 +17,10 @@ fig.add_subplot(122).plot(temp_array, tim_array)
 
 
 mydata = main()
-ypoints = mydata[1::2]
-xpoints = mydata[0::2]
-yint = [float(x) for x in ypoints]
-xint = [float(y) for y in xpoints]
+yint = [float(x) for x in mydata[1::2]]
+xint = [float(y) for y in  mydata[0::2]]
 fig.add_subplot(121).plot(xint, yint)
+fig.set_label("Voltage over Time")
 
 canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
 canvas.draw()
