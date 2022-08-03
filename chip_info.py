@@ -10,13 +10,14 @@ from tkinter import ttk
 # FIXME: save button should be disabled if the form is invalid
 # TODO: save form to specified path
 def show_entry_fields():
-    print("Serial #: %s\nDescription: %s" % (e1.get(), e2.get()))
+    print("Serial #: {sr}\nDescription: {dsc}\nTarget Temp: {tg}".format(sr=e1.get(), dsc=e2.get(),tg= e3.get()))
 
 
 master = tk.Tk()
+master.title('User Input')
 serial_num = tk.StringVar()
 chip_descr = tk.StringVar()
-target_curr = tk.DoubleVar()
+target_curr = tk.DoubleVar(value=25)
 selected_thermostream = tk.StringVar()
 
 rm = pyvisa.ResourceManager()
@@ -34,6 +35,8 @@ e3 = tk.Entry(master,textvariable=target_curr)
 e1.grid(row=0, column=1)
 e2.grid(row=1, column=1)
 e3.grid(row=2,column=1)
+
+
 
 def openmaingui():
     ts_visa=selected_thermostream.get()

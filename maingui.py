@@ -14,6 +14,7 @@ def maingui(thermo_in, chip_id, chip_descr, trgt):
     tolerance_lim = list(np.arange(trgt - 0.05 * trgt / 100, trgt + 0.05 * trgt / 100, trgt / 100))
     set_voltage(meas_voltage, trgt)
     window = tk.Tk()
+    window.title("TempSweepOverTime")
     window.geometry('640x480')
     swindow = Frame(window)
     swindow.grid()
@@ -32,7 +33,7 @@ def maingui(thermo_in, chip_id, chip_descr, trgt):
     # TODO : fix yaxis scaling so that we get last reading +/- 30%
     def generate_animation(i, xarr, yarr):
         vlt = float(measure_volts(meas_voltage))
-        is_on_target = math.isclose(vlt, trgt, rel_tol=1e-10)
+        is_on_target = math.isclose(vlt, trgt, rel_tol=0.05)
         lg = math.log1p(vlt)
         yarr.append(vlt)
         xarr.append(yarr.index(vlt))
@@ -48,13 +49,13 @@ def maingui(thermo_in, chip_id, chip_descr, trgt):
         # ax.set_xticks(rotation=60, ha='right')
         ax.xaxis.set_tick_params(rotation=30, labelsize=10)
         plt.gcf().autofmt_xdate()
-
+        plt.rcParams['axes.formatter.useoffset'] = False
         plt.xticks(rotation=60, ha='right')
-        plt.subplots_adjust(bottom=0.30)
+        plt.subplots_adjust(bottom=0.30, left= 0.30)
         print("targ", vlt)
-        label = tk.Label(text="on target").grid(row=5)
+        label = tk.Label(text="on target:{}".format(is_on_target)).grid(row=5)
 
-    an = animation.FuncAnimation(fig, generate_animation, fargs=(xs, ys), interval=1000)
+    an = animation.FuncAnimation(fig, generate_animation, fargs=(xs, ys), interval=100)
 
     swindow.mainloop()
 
@@ -65,13 +66,13 @@ def store_meas(dt):
 
 def set_voltage(ins, t):
     print('target',t,"is",ins)
-    s = ins.source.voltage(int(t))
+    s = ins.source.voltage(t)
     print("SDs",s)
     return s
 
 
 def measure_volts(inst):
-    return inst.measure.current()
+    return inst.measure.voltage()
 
 
 def open_ts(thermo_resource):
