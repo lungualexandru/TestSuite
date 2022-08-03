@@ -37,6 +37,7 @@ def maingui(thermo_in, chip_id, chip_descr,trgt):
 
         xarr = [datetime.datetime.now() + datetime.timedelta(seconds=i) for i in range(len(xarr))]
         yarr = yarr[-20:]
+        xarr = xarr[-20:]
         ax.clear()
         ax.plot(xarr, yarr, color="blue")
         ax.set_xlabel('Time')
