@@ -8,9 +8,11 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.animation as animation
 
-def maingui(thermo_in, chip_id, chip_descr,trgt):
+
+def maingui(thermo_in, chip_id, chip_descr, trgt):
     meas_voltage = open_ts(thermo_in)
-    tolerance_lim =list(np.arange(trgt-0.05*trgt/100,trgt+0.05*trgt/100,trgt/100))
+    tolerance_lim = list(np.arange(trgt - 0.05 * trgt / 100, trgt + 0.05 * trgt / 100, trgt / 100))
+    set_voltage(meas_voltage, trgt)
     window = tk.Tk()
     window.geometry('640x480')
     swindow = Frame(window)
@@ -27,10 +29,11 @@ def maingui(thermo_in, chip_id, chip_descr,trgt):
     canvas.get_tk_widget().grid(row=5, column=0)
     canvas.draw()
 
+    # TODO : fix yaxis scaling so that we get last reading +/- 30%
     def generate_animation(i, xarr, yarr):
         vlt = float(measure_volts(meas_voltage))
-        is_on_target= math.isclose(vlt, trgt, rel_tol=1e-10)
-        lg=math.log1p(vlt)
+        is_on_target = math.isclose(vlt, trgt, rel_tol=1e-10)
+        lg = math.log1p(vlt)
         yarr.append(vlt)
         xarr.append(yarr.index(vlt))
         # x =
@@ -48,7 +51,7 @@ def maingui(thermo_in, chip_id, chip_descr,trgt):
 
         plt.xticks(rotation=60, ha='right')
         plt.subplots_adjust(bottom=0.30)
-        print("targgggg",trgt)
+        print("targ", vlt)
         label = tk.Label(text="on target").grid(row=5)
 
     an = animation.FuncAnimation(fig, generate_animation, fargs=(xs, ys), interval=1000)
@@ -58,6 +61,13 @@ def maingui(thermo_in, chip_id, chip_descr,trgt):
 
 def store_meas(dt):
     print("thois should store", dt)
+
+
+def set_voltage(ins, t):
+    print('target',t,"is",ins)
+    s = ins.source.voltage(int(t))
+    print("SDs",s)
+    return s
 
 
 def measure_volts(inst):
