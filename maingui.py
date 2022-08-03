@@ -35,9 +35,16 @@ def maingui(thermo_in, chip_id, chip_descr,trgt):
         xarr.append(yarr.index(vlt))
         # x =
 
-        xarr = [datetime.datetime.now() + datetime.timedelta(hours=i) for i in range(len(xarr))]
+        xarr = [datetime.datetime.now() + datetime.timedelta(seconds=i) for i in range(len(xarr))]
         yarr = yarr[-20:]
-        ax.plot(xarr, yarr, color="red")
+        ax.clear()
+        ax.plot(xarr, yarr, color="blue")
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Current')
+        # ax.set_xticks(rotation=60, ha='right')
+        ax.xaxis.set_tick_params(rotation=30, labelsize=10)
+        plt.gcf().autofmt_xdate()
+
         plt.xticks(rotation=60, ha='right')
         plt.subplots_adjust(bottom=0.30)
         print("targgggg",trgt)
