@@ -1,18 +1,20 @@
+import math
 import tkinter as tk
+import datetime
 from tkinter.ttk import Frame
 import easy_scpi as scpi
+import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.animation as animation
 
-def maingui(thermo_in, chip_id, chip_descr):
+def maingui(thermo_in, chip_id, chip_descr,trgt):
     meas_voltage = open_ts(thermo_in)
-
+    tolerance_lim =list(np.arange(trgt-0.05*trgt/100,trgt+0.05*trgt/100,trgt/100))
     window = tk.Tk()
     window.geometry('640x480')
     swindow = Frame(window)
     swindow.grid()
-
     tk.Button(swindow, text='Quit', command=lambda: store_meas(swindow)).grid(row=4, column=0, sticky=tk.W, pady=4)
     tk.Button(swindow, text='Start', command=swindow.quit).grid(row=4, column=1, sticky=tk.W, pady=4)
     tk.Button(swindow, text="Stop", command=swindow.quit).grid(row=4, column=3, sticky=tk.W, pady=4)
@@ -27,13 +29,19 @@ def maingui(thermo_in, chip_id, chip_descr):
 
     def generate_animation(i, xarr, yarr):
         vlt = float(measure_volts(meas_voltage))
+        is_on_target= math.isclose(vlt, trgt, rel_tol=1e-10)
+        lg=math.log1p(vlt)
         yarr.append(vlt)
         xarr.append(yarr.index(vlt))
-        xarr = xarr[-20:]
+        # x =
+
+        xarr = [datetime.datetime.now() + datetime.timedelta(hours=i) for i in range(len(xarr))]
         yarr = yarr[-20:]
         ax.plot(xarr, yarr, color="red")
         plt.xticks(rotation=60, ha='right')
         plt.subplots_adjust(bottom=0.30)
+        print("targgggg",trgt)
+        label = tk.Label(text="on target").grid(row=5)
 
     an = animation.FuncAnimation(fig, generate_animation, fargs=(xs, ys), interval=1000)
 
